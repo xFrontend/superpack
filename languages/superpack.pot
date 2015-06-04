@@ -1,0 +1,241 @@
+# Copyright (C) 2015 SuperPack
+# This file is distributed under the same license as the SuperPack package.
+msgid ""
+msgstr ""
+"Project-Id-Version: SuperPack 0.1.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/superpack\n"
+"POT-Creation-Date: 2015-06-03 19:42:19+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: inc/widgets/widget-about.php:19
+msgctxt "admin"
+msgid "About (SuperPack)"
+msgstr ""
+
+#: inc/widgets/widget-about.php:22
+msgctxt "admin"
+msgid "Display your bio/site info on your site."
+msgstr ""
+
+#: inc/widgets/widget-about.php:67
+msgid "About"
+msgstr ""
+
+#: inc/widgets/widget-about.php:88
+msgid "Add an image or description to hide this message."
+msgstr ""
+
+#: inc/widgets/widget-about.php:121 inc/widgets/widget-comments.php:117
+#: inc/widgets/widget-instagram.php:111 inc/widgets/widget-posts.php:180
+#: inc/widgets/widget-tags.php:100
+msgctxt "admin"
+msgid "Title:"
+msgstr ""
+
+#: inc/widgets/widget-about.php:130
+msgctxt "admin"
+msgid "Select an Image"
+msgstr ""
+
+#: inc/widgets/widget-about.php:131
+msgctxt "admin"
+msgid "Insert into Widget"
+msgstr ""
+
+#: inc/widgets/widget-about.php:133
+msgctxt "admin"
+msgid "Select Image"
+msgstr ""
+
+#: inc/widgets/widget-about.php:136
+msgctxt "admin"
+msgid "Remove Image"
+msgstr ""
+
+#: inc/widgets/widget-about.php:152
+msgctxt "admin"
+msgid "Content:"
+msgstr ""
+
+#: inc/widgets/widget-about.php:162
+msgctxt "admin"
+msgid "Automatically add paragraphs"
+msgstr ""
+
+#: inc/widgets/widget-comments.php:19
+msgctxt "admin"
+msgid "Comments (SuperPack)"
+msgstr ""
+
+#: inc/widgets/widget-comments.php:22
+msgctxt "admin"
+msgid "Display the most recent comments."
+msgstr ""
+
+#: inc/widgets/widget-comments.php:73
+msgid "Recent Comments"
+msgstr ""
+
+#. Translators: 1: Comment author
+
+#: inc/widgets/widget-comments.php:87
+msgid "%1$s on"
+msgstr ""
+
+#: inc/widgets/widget-comments.php:125 inc/widgets/widget-instagram.php:140
+#: inc/widgets/widget-posts.php:214 inc/widgets/widget-tags.php:124
+msgctxt "admin"
+msgid "Number of items to show:"
+msgstr ""
+
+#: inc/widgets/widget-instagram.php:19
+msgctxt "admin"
+msgid "Instagram (SuperPack)"
+msgstr ""
+
+#: inc/widgets/widget-instagram.php:22
+msgctxt "admin"
+msgid "Display your latest Instagram photos on your site."
+msgstr ""
+
+#: inc/widgets/widget-instagram.php:57
+msgid "Instagram Photos"
+msgstr ""
+
+#: inc/widgets/widget-instagram.php:81 inc/widgets/widget-instagram.php:230
+msgid "Nothing to show."
+msgstr ""
+
+#: inc/widgets/widget-instagram.php:119
+msgctxt "admin"
+msgid "Instagram Username:"
+msgstr ""
+
+#: inc/widgets/widget-instagram.php:127
+msgctxt "admin"
+msgid "Columns:"
+msgstr ""
+
+#: inc/widgets/widget-instagram.php:252
+msgid "Instagram username is too short."
+msgstr ""
+
+#: inc/widgets/widget-instagram.php:258
+msgid "Unable to communicate with Instagram."
+msgstr ""
+
+#: inc/widgets/widget-instagram.php:262
+msgid "Instagram did not return a 200."
+msgstr ""
+
+#: inc/widgets/widget-instagram.php:274
+msgid "Instagram has returned invalid data."
+msgstr ""
+
+#: inc/widgets/widget-posts.php:19
+msgctxt "admin"
+msgid "Posts (SuperPack)"
+msgstr ""
+
+#: inc/widgets/widget-posts.php:22
+msgctxt "admin"
+msgid "Display the blog posts on your site."
+msgstr ""
+
+#: inc/widgets/widget-posts.php:188
+msgctxt "admin"
+msgid "Filter"
+msgstr ""
+
+#: inc/widgets/widget-posts.php:201
+msgctxt "admin"
+msgid "Media/Thumbnail"
+msgstr ""
+
+#: inc/widgets/widget-posts.php:286
+msgid "Recent Posts"
+msgstr ""
+
+#: inc/widgets/widget-posts.php:287
+msgid "Random Posts"
+msgstr ""
+
+#: inc/widgets/widget-posts.php:288
+msgid "Sticky Posts"
+msgstr ""
+
+#: inc/widgets/widget-posts.php:289
+msgid "Related Posts"
+msgstr ""
+
+#: inc/widgets/widget-posts.php:295
+msgctxt "admin"
+msgid "None"
+msgstr ""
+
+#: inc/widgets/widget-posts.php:296
+msgctxt "admin"
+msgid "Small"
+msgstr ""
+
+#: inc/widgets/widget-posts.php:297
+msgctxt "admin"
+msgid "Large"
+msgstr ""
+
+#: inc/widgets/widget-posts.php:361
+msgid "No posts to show."
+msgstr ""
+
+#: inc/widgets/widget-posts.php:412
+msgid "No sticky posts found."
+msgstr ""
+
+#: inc/widgets/widget-tags.php:19
+msgctxt "admin"
+msgid "Tags (SuperPack)"
+msgstr ""
+
+#: inc/widgets/widget-tags.php:22
+msgctxt "admin"
+msgid "Display your most used tags."
+msgstr ""
+
+#: inc/widgets/widget-tags.php:52 inc/widgets/widget-tags.php:66
+msgid "Tags"
+msgstr ""
+
+#: inc/widgets/widget-tags.php:107
+msgctxt "admin"
+msgid "Taxonomy:"
+msgstr ""
+
+#: inc/widgets/widget-tags.php:247 inc/widgets/widget-tags.php:253
+msgid "%s topic"
+msgid_plural "%s topics"
+msgstr[0] ""
+msgstr[1] ""
+#. Plugin Name of the plugin/theme
+msgid "SuperPack"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://wordpress.org/extend/plugins/superpack/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Provides a backend to supercharge your site."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Splendous"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://splendo.us/"
+msgstr ""
