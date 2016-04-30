@@ -11,7 +11,7 @@ Provides half a dozen Shortcodes, including half a dozen Widgets, to supercharge
 * `[social-icons]` - Add your social links with icons.
 
 
-More details on shortcodes are given on [FAQ](https://github.com/xFrontend/SuperPack#faq).
+More details on shortcodes are given on [FAQ](https://github.com/xFrontend/SuperPack#frequently-asked-questions).
 
 ## Widgets
 
