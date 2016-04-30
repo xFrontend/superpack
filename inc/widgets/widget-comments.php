@@ -4,31 +4,26 @@ if ( ! defined( 'ABSPATH' ) ) :
 	exit; // Exit if accessed directly
 endif;
 
-add_action( 'widgets_init', 'superpack_register_widget_comments' );
-
-function superpack_register_widget_comments() {
-	register_widget( 'Superpack_Widget_Comments' );
-}
-
 class Superpack_Widget_Comments extends WP_Widget {
 
 	public function __construct() {
 
 		parent::__construct(
 			'superpack-widget-comments',
-			_x( 'Comments (SuperPack)', 'admin', 'superpack' ),
+			esc_html_x( 'Comments (SuperPack)', 'admin', 'superpack' ),
 			array(
-				'classname'   => 'sp-widget sp-widget-comments',
-				'description' => _x( 'Display the most recent comments.', 'admin', 'superpack' ),
+				'classname'   => 'superpack__widget superpack__widget-comments',
+				'description' => esc_html_x( 'Display the most recent comments.', 'admin', 'superpack' ),
 			)
 		);
 
 		add_action( 'comment_post', array( &$this, 'flush_cache' ) );
 		add_action( 'transition_comment_status', array( &$this, 'flush_cache' ) );
+		add_action( 'switch_theme', array( &$this, 'flush_cache' ) );
 	}
 
 	public function widget( $args, $instance ) {
-		$cache = wp_cache_get( $this->id_base, 'sp-widget' );
+		$cache = wp_cache_get( $this->id_base, 'superpack__widget' );
 
 		if ( ! is_array( $cache ) ) {
 			$cache = array();
@@ -48,7 +43,7 @@ class Superpack_Widget_Comments extends WP_Widget {
 
 		$title  = $this->get_title( $instance );
 		$number = $this->get_number( $instance );
-		$avatar = apply_filters( 'superpack_widget_comments_image_size', '64' );
+		$avatar = apply_filters( 'superpack_widget_comment_avatar_size', Superpack()->get_settings()->comment_avatar_size );
 
 		$comments = get_comments( array(
 			'number'      => $number,
@@ -70,7 +65,7 @@ class Superpack_Widget_Comments extends WP_Widget {
 			if ( $title ) {
 				$content .= $args['before_title'] . $title . $args['after_title'];
 			} else {
-				$content .= $args['before_title'] . __( 'Recent Comments', 'superpack' ) . $args['after_title'];
+				$content .= $args['before_title'] . esc_html__( 'Recent Comments', 'superpack' ) . $args['after_title'];
 			}
 
 			$content .= '<ul class="comments_list_widget">';
@@ -82,11 +77,11 @@ class Superpack_Widget_Comments extends WP_Widget {
 				$content .= '<a href="' . esc_url( get_comment_link( $comment->comment_ID ) ) . '" title="' . esc_attr( $title ) . '" >';
 				$content .= '<div class="avatar">' . get_avatar( $comment, $avatar ) . '</div>';
 				$content .= '<div class="content">';
-					$content .= '<span class="user-nick sp-meta">';
-					/* Translators: 1: Comment author */
-					$content .= sprintf( __( '%1$s on', 'superpack' ), get_comment_author( $comment->comment_ID ) );
-					$content .= '</span>';
-					$content .= '<div class="title"><strong class="h5">' . esc_html( $title ) . '</strong></div>';
+				$content .= '<span class="user-nick">';
+				/* Translators: 1: Comment author */
+				$content .= sprintf( esc_html__( '%1$s on', 'superpack' ), '<strong>' . get_comment_author( $comment->comment_ID ) . '</strong>' );
+				$content .= '</span>';
+				$content .= '<h4 class="post-title">' . esc_html( $title ) . '</h4>';
 				$content .= '</div>';
 				$content .= '</a>';
 				$content .= '</li>';
@@ -101,11 +96,11 @@ class Superpack_Widget_Comments extends WP_Widget {
 
 		echo $content;
 
-		wp_cache_set( $this->id_base, $cache, 'sp-widget' );
+		wp_cache_set( $this->id_base, $cache, 'superpack__widget' );
 	}
 
 	public function flush_cache() {
-		wp_cache_delete( $this->id_base, 'sp-widget' );
+		wp_cache_delete( $this->id_base, 'superpack__widget' );
 	}
 
 	public function form( $instance ) {
@@ -114,7 +109,7 @@ class Superpack_Widget_Comments extends WP_Widget {
 		?>
 		<p>
 			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _ex( 'Title:', 'admin', 'superpack' ); ?></label>
+				for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php echo esc_html_x( 'Title:', 'admin', 'superpack' ); ?></label>
 			<input type="text" class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"
 			       name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"
 			       value="<?php echo esc_attr( $title ); ?>">
@@ -122,7 +117,7 @@ class Superpack_Widget_Comments extends WP_Widget {
 
 		<p>
 			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'number' ) ); ?>"><?php _ex( 'Number of items to show:', 'admin', 'superpack' ); ?></label>
+				for="<?php echo esc_attr( $this->get_field_id( 'number' ) ); ?>"><?php echo esc_html_x( 'Number of items to show:', 'admin', 'superpack' ); ?></label>
 			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'number' ) ); ?>"
 			        name="<?php echo esc_attr( $this->get_field_name( 'number' ) ); ?>">
 				<?php
@@ -132,14 +127,7 @@ class Superpack_Widget_Comments extends WP_Widget {
 				?>
 			</select>
 		</p>
-
-		<?php /*
-        <p>
-            <input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'filter_blog' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'filter_blog' ) ); ?>" <?php checked( ! isset( $instance['filter_blog'] ) OR $instance['filter_blog'] ? $instance['filter_blog'] : 0 ); ?> >
-            <label for="<?php echo esc_attr( $this->get_field_id( 'filter_blog' ) ); ?>"><?php _ex( 'Display only blog comments.', 'admin', 'superpack' ); ?></label>
-        </p>
-        */ ?>
-	<?php
+		<?php
 	}
 
 	public function update( $new_instance, $old_instance ) {

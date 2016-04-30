@@ -4,22 +4,16 @@ if ( ! defined( 'ABSPATH' ) ) :
 	exit; // Exit if accessed directly
 endif;
 
-add_action( 'widgets_init', 'superpack_register_widget_about' );
-
-function superpack_register_widget_about() {
-	register_widget( 'Superpack_Widget_About' );
-}
-
 class Superpack_Widget_About extends WP_Widget {
 
 	public function __construct() {
 
 		parent::__construct(
-			'sp-widget-about',
-			_x( 'About (SuperPack)', 'admin', 'superpack' ),
+			'superpack-widget-about',
+			esc_html_x( 'About (SuperPack)', 'admin', 'superpack' ),
 			array(
-				'classname'   => 'sp-widget sp-widget-about',
-				'description' => _x( 'Display your bio/site info on your site.', 'admin', 'superpack' ),
+				'classname'   => 'superpack__widget superpack__widget-about',
+				'description' => esc_html_x( 'Display your bio/site info on your site.', 'admin', 'superpack' ),
 			),
 			array(
 				'height' => 200,
@@ -27,12 +21,13 @@ class Superpack_Widget_About extends WP_Widget {
 			)
 		);
 
+		add_filter( 'superpack_about_text', 'do_shortcode' );
 		add_action( 'sidebar_admin_setup', array( &$this, 'enqueue' ) );
 		add_action( 'switch_theme', array( &$this, 'flush_cache' ) );
 	}
 
 	public function widget( $args, $instance ) {
-		$cache = wp_cache_get( $this->id_base, 'sp-widget' );
+		$cache = wp_cache_get( $this->id_base, 'superpack__widget' );
 
 		if ( ! is_array( $cache ) ) {
 			$cache = array();
@@ -55,7 +50,7 @@ class Superpack_Widget_About extends WP_Widget {
 		if ( 0 < $attachment_id ) {
 			$thumbs = wp_get_attachment_image(
 				$attachment_id,
-				apply_filters( 'superpack_widget_about_image_size', 'medium', $attachment_id )
+				apply_filters( 'superpack_widget_about_image_size', Superpack()->get_settings()->image_size_about, $attachment_id )
 			);
 		}
 
@@ -64,19 +59,21 @@ class Superpack_Widget_About extends WP_Widget {
 		if ( $title ) {
 			$content .= $args['before_title'] . $title . $args['after_title'];
 		} else {
-			$content .= '<h3 class="screen-reader-text">' . __( 'About', 'superpack' ) . '</h3>';
+			$content .= '<h3 class="screen-reader-text">' . esc_html__( 'About', 'superpack' ) . '</h3>';
 		}
 
 		if ( ! empty( $thumbs ) || ! empty( $description ) ) {
-			$content .= '<div class="sp-about">';
+			$content .= '<div class="superpack__about">';
 
 			if ( ! empty( $thumbs ) ) {
-				$content .= '<div class="sp-media-container">';
-					$content .= apply_filters( 'superpack_widget_about_image_html', $thumbs, $attachment_id );
+				$content .= '<div class="superpack__thumbnail">';
+				$content .= $thumbs;
 				$content .= '</div>';
 			};
 
 			if ( ! empty( $description ) ) {
+				$description = apply_filters( 'superpack_about_text', $description, $instance );
+
 				$content .= '<div class="content description">';
 				$content .= ! empty( $instance['filter'] ) ? wpautop( $description ) : '<p>' . $description . '</p>';
 				$content .= '</div>';
@@ -85,7 +82,7 @@ class Superpack_Widget_About extends WP_Widget {
 			$content .= '</div>';
 		} else {
 			$content .= '<div class="content description">';
-			$content .= '<p>' . __( 'Add an image or description to hide this message.', 'superpack' ) . '</p>';
+			$content .= '<p>' . esc_html__( 'Add an image or description to hide this message.', 'superpack' ) . '</p>';
 			$content .= '</div>';
 		}
 
@@ -93,13 +90,13 @@ class Superpack_Widget_About extends WP_Widget {
 
 		$cache[ $args['widget_id'] ] = $content;
 
-		wp_cache_set( $this->id_base, $cache, 'sp-widget' );
+		wp_cache_set( $this->id_base, $cache, 'superpack__widget' );
 
 		echo $content;
 	}
 
 	public function flush_cache() {
-		wp_cache_delete( $this->id_base, 'sp-widget' );
+		wp_cache_delete( $this->id_base, 'superpack__widget' );
 	}
 
 	public function form( $instance ) {
@@ -118,27 +115,27 @@ class Superpack_Widget_About extends WP_Widget {
 		?>
 		<p>
 			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _ex( 'Title:', 'admin', 'superpack' ); ?></label>
+				for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php echo esc_html_x( 'Title:', 'admin', 'superpack' ); ?></label>
 			<input type="text" class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"
 			       name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"
 			       value="<?php echo esc_attr( $title ); ?>">
 		</p>
 
-		<div class="uploader uploader-about">
+		<div class="superpack__uploader superpack__uploader-about">
 			<p>
-				<button type="button" class="button sp-media__select"
+				<button type="button" class="button superpack__media-select"
 				        data-button-title="<?php echo esc_attr_x( 'Select an Image', 'admin', 'superpack' ) ?>"
-				        data-button-text="<?php echo esc_attr_x( 'Insert into Widget', 'admin', 'superpack' ) ?>"
+				        data-button-text="<?php echo esc_attr_x( 'Insert to the Widget', 'admin', 'superpack' ) ?>"
 				        data-filter="image"
-					><?php _ex( 'Select Image', 'admin', 'superpack' ); ?></button>
+					><?php echo esc_html_x( 'Select Image', 'admin', 'superpack' ); ?></button>
 
 				<button type="button"
-				        class="sp-button sp-media__clear<?php if ( ! isset( $thumbs[0] ) ): ?> hide-if-js<?php endif; ?>"><?php _ex( 'Remove Image', 'admin', 'superpack' ); ?></button>
+				        class="superpack__button superpack__media-clear<?php if ( ! isset( $thumbs[0] ) ): ?> hide-if-js<?php endif; ?>"><?php echo esc_html_x( 'Remove Image', 'admin', 'superpack' ); ?></button>
 			</p>
 
 			<div class="image-preview">
 				<?php if ( isset( $thumbs[0] ) ) {
-					echo '<img src="' . esc_url( $thumbs[0] ) . '">';
+					echo '<img src="' . esc_url( $thumbs[0] ) . '" alt="">';
 				}; ?>
 			</div>
 
@@ -149,7 +146,7 @@ class Superpack_Widget_About extends WP_Widget {
 
 		<p>
 			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'description' ) ); ?>"><?php _ex( 'Content:', 'admin', 'superpack' ); ?></label>
+				for="<?php echo esc_attr( $this->get_field_id( 'description' ) ); ?>"><?php echo esc_html_x( 'Content:', 'admin', 'superpack' ); ?></label>
 			<textarea class="widefat" rows="8" cols="20"
 			          id="<?php echo esc_attr( $this->get_field_id( 'description' ) ); ?>"
 			          name="<?php echo esc_attr( $this->get_field_name( 'description' ) ); ?>"><?php echo esc_textarea( $description ); ?></textarea>
@@ -159,10 +156,10 @@ class Superpack_Widget_About extends WP_Widget {
 			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'filter' ) ); ?>"
 			       name="<?php echo esc_attr( $this->get_field_name( 'filter' ) ); ?>" <?php checked( isset( $instance['filter'] ) ? $instance['filter'] : 0 ); ?> >
 			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'filter' ) ); ?>"><?php _ex( 'Automatically add paragraphs', 'admin', 'superpack' ); ?></label>
+				for="<?php echo esc_attr( $this->get_field_id( 'filter' ) ); ?>"><?php echo esc_html_x( 'Automatically add paragraphs', 'admin', 'superpack' ); ?></label>
 		</p>
 
-	<?php
+		<?php
 	}
 
 	public function update( $new_instance, $old_instance ) {
@@ -185,28 +182,38 @@ class Superpack_Widget_About extends WP_Widget {
 	}
 
 	public function enqueue() {
-		$ext_css = SUPERPACK__CSSJS_SUFFIX . '.css';
-		$ext_js  = SUPERPACK__CSSJS_SUFFIX . '.js';
+		/**
+		 * CSS
+		 */
+		wp_add_inline_style(
+			'wp-admin', '
 
-		wp_register_style(
-			Superpack()->codename( 'common-admin-ui-css' ),
-			Superpack()->protocol( SUPERPACK__ASSETS_URI . '/css/common-admin' . $ext_css ),
-			array(),
-			Superpack()->version()
-		);
+			/* Superpack Widget-About */
+			.superpack__uploader .image-preview img {
+			  max-width: 100%; }
 
-		wp_enqueue_style( Superpack()->codename( 'common-admin-ui-css' ) );
+			.superpack__uploader-about .image-preview img {
+			  width: 100%; }
 
-		wp_register_script(
-			Superpack()->codename( 'widgets-admin-js' ),
-			Superpack()->protocol( SUPERPACK__ASSETS_URI . '/js/widgets-admin' . $ext_js ),
+			.superpack__uploader-gallery .image-preview img {
+			  margin: 0 8px 10px 0; }
+        ' );
+
+		/**
+		 * JavaScript
+		 */
+		$ext_js = '.js'; // SUPERPACK__CSSJS_SUFFIX . '.js';
+
+		wp_enqueue_media();
+
+		wp_enqueue_script(
+			Superpack()->codename( 'functions-js' ),
+			Superpack()->protocol( SUPERPACK__ASSETS_URI . '/js/functions' . $ext_js ),
 			array( 'jquery', 'media-upload', 'media-views' ),
 			Superpack()->version(),
 			true
 		);
 
-		wp_enqueue_media();
-		wp_enqueue_script( Superpack()->codename( 'widgets-admin-js' ) );
 	}
 
 	public function get_attachment_id( $instance ) {

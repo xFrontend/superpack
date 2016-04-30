@@ -4,22 +4,16 @@ if ( ! defined( 'ABSPATH' ) ) :
 	exit; // Exit if accessed directly
 endif;
 
-add_action( 'widgets_init', 'superpack_register_widget_posts' );
-
-function superpack_register_widget_posts() {
-	register_widget( 'Superpack_Widget_Posts' );
-}
-
 class Superpack_Widget_Posts extends WP_Widget {
 
 	public function __construct() {
 
 		parent::__construct(
 			'superpack-widget-posts',
-			_x( 'Posts (SuperPack)', 'admin', 'superpack' ),
+			esc_html_x( 'Posts (SuperPack)', 'admin', 'superpack' ),
 			array(
-				'classname'   => 'sp-widget sp-widget-posts',
-				'description' => _x( 'Display the blog posts on your site.', 'admin', 'superpack' ),
+				'classname'   => 'superpack__widget superpack__widget-posts',
+				'description' => esc_html_x( 'Display the blog posts on your site.', 'admin', 'superpack' ),
 			)
 		);
 
@@ -29,7 +23,7 @@ class Superpack_Widget_Posts extends WP_Widget {
 	}
 
 	public function widget( $args, $instance ) {
-		$cache = wp_cache_get( $this->id_base, 'sp-widget' );
+		$cache = wp_cache_get( $this->id_base, 'superpack__widget' );
 
 		if ( ! is_array( $cache ) ) {
 			$cache = array();
@@ -51,8 +45,7 @@ class Superpack_Widget_Posts extends WP_Widget {
 			return;
 		}
 
-		$title  = $this->get_title( $instance );
-		$style  = $this->get_style( $instance );
+		$title = $this->get_title( $instance );
 
 		$content = $args['before_widget'];
 
@@ -72,71 +65,34 @@ class Superpack_Widget_Posts extends WP_Widget {
 			$index = 0;
 
 			$content .= $html_widget_title;
-			$content .= '<ul class="' . esc_attr( $filter ) . ' ' . esc_attr( $style ) . '">';
+			$content .= '<ul class="posts-' . esc_attr( $filter ) . '">';
 
 			while ( $data->have_posts() ) {
+				$data->the_post();
 
 				$index ++;
 
-				$data->the_post();
-
 				$title = get_the_title() ? get_the_title() : get_the_ID();
-
-				$html_title = '<div class="title"><strong class="h5">' . esc_html( $title ) . '</strong></div>';
 
 				$content .= '<li>';
 
-				$thumb_id = get_post_thumbnail_id() ? get_post_thumbnail_id() : 0;
+				$thumb_id   = get_post_thumbnail_id() ? get_post_thumbnail_id() : 0;
+				$thumb_size = apply_filters( 'superpack_widget_posts_image_size', Superpack()->get_settings()->image_size_posts, $thumb_id );
 
-				$thumb_size_large = apply_filters( 'superpack_widget_posts_image_size', 'medium', $thumb_id );
-				$thumb_size_small = apply_filters( 'superpack_widget_posts_image_size', 'thumbnail', $thumb_id );
+				if ( 0 < $thumb_id && ! post_password_required() ) {
 
-				if ( 'large' == $style ) {
-
-					if ( 0 < $thumb_id && ! post_password_required() ) {
-
-						$content .= '<div class="thumb-wrapper clear">';
-							$content .= '<div class="sp-media-container">';
-								$content .= '<div class="format-' . esc_attr( get_post_format() ? get_post_format() : 'standard' ) . ' ratio">';
-									$content .= '<a href="' . get_the_permalink() . '" title="">' . wp_get_attachment_image( $thumb_id, $thumb_size_large ) . '</a>';
-								$content .= '</div>';
-							$content .= '</div>';
-						$content .= '</div>';
-
-					}
-
-					$content .= '<a href="' . get_permalink() . '" title="' . esc_attr( $title ) . '">';
-						$content .= '<div class="content">';
-							$content .= $html_title;
-							$content .= '<span class="post-date sp-meta">' . get_the_date() . '</span>';
-						$content .= '</div>';
-					$content .= '</a>';
-
-				} elseif ( 'small' == $style ) {
-
-					if ( 0 < $thumb_id && ! post_password_required() ) {
-
-						$content .= '<div class="sp-media-container">';
-							$content .= '<div class="format-' . esc_attr( get_post_format() ? get_post_format() : 'standard' ) . ' ratio">';
-								$content .= '<a href="' . get_the_permalink() . '" title="">' . wp_get_attachment_image( $thumb_id, $thumb_size_small ) . '</a>';
-							$content .= '</div>';
-						$content .= '</div>';
-
-					}
-
-					$content .= '<a href="' . get_permalink() . '" title="' . esc_attr( $title ) . '">';
-						$content .= '<span class="post-date sp-meta">' . get_the_date() . '</span>';
-						$content .= $html_title;
-					$content .= '</a>';
-
-				} else {
-
-					$content .= '<a href="' . get_permalink() . '" title="' . esc_attr( $title ) . '">';
-						$content .= $html_title;
-						$content .= '<span class="post-date sp-meta">' . get_the_date() . '</span>';
-					$content .= '</a>';
+					$content .= '<div class="superpack__thumbnail">';
+					$content .= '<div class="format-' . esc_attr( get_post_format() ? get_post_format() : 'standard' ) . '">';
+					$content .= '<a href="' . get_the_permalink() . '" title="">' . wp_get_attachment_image( $thumb_id, $thumb_size ) . '</a>';
+					$content .= '</div>';
+					$content .= '</div>';
 
 				}
+
+				$content .= '<a class="content" href="' . get_permalink() . '" title="' . esc_attr( $title ) . '">';
+				$content .= '<h4 class="post-title">' . esc_html( $title ) . '</h4>';
+				$content .= '<span class="post-date">' . get_the_date() . '</span>';
+				$content .= '</a>';
 
 				$content .= '</li>';
 			}
@@ -147,8 +103,8 @@ class Superpack_Widget_Posts extends WP_Widget {
 
 			$content .= $html_widget_title;
 
-			$content .= '<ul class="' . esc_attr( $filter ) . ' ' . esc_attr( $style ) . '">';
-				$content .= '<li class="error">' . $data->get_error_message() . '</li>';
+			$content .= '<ul class="posts-' . esc_attr( $filter ) . '">';
+			$content .= '<li class="error">' . $data->get_error_message() . '</li>';
 			$content .= '</ul>';
 
 		}
@@ -161,23 +117,22 @@ class Superpack_Widget_Posts extends WP_Widget {
 
 		wp_reset_postdata(); // Reset the global $the_post as this query will have stomped on it
 
-		wp_cache_set( $this->id_base, $cache, 'sp-widget' );
+		wp_cache_set( $this->id_base, $cache, 'superpack__widget' );
 	}
 
 	public function flush_cache() {
-		wp_cache_delete( $this->id_base, 'sp-widget' );
+		wp_cache_delete( $this->id_base, 'superpack__widget' );
 	}
 
 	public function form( $instance ) {
 		$title   = $this->get_title( $instance );
 		$number  = $this->get_number( $instance );
 		$filters = $this->post_filters();
-		$styles  = $this->post_styles();
 
 		?>
 		<p>
 			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _ex( 'Title:', 'admin', 'superpack' ); ?></label>
+				for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php echo esc_html_x( 'Title:', 'admin', 'superpack' ); ?></label>
 			<input type="text" class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"
 			       name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"
 			       value="<?php echo esc_attr( $title ); ?>">
@@ -185,7 +140,7 @@ class Superpack_Widget_Posts extends WP_Widget {
 
 		<p>
 			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'filter' ) ) ?>"><?php _ex( 'Filter', 'admin', 'superpack' ) ?></label>
+				for="<?php echo esc_attr( $this->get_field_id( 'filter' ) ) ?>"><?php echo esc_html_x( 'Filter', 'admin', 'superpack' ) ?></label>
 			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'filter' ) ) ?>"
 			        name="<?php echo esc_attr( $this->get_field_name( 'filter' ) ) ?>">
 				<?php
@@ -198,20 +153,7 @@ class Superpack_Widget_Posts extends WP_Widget {
 
 		<p>
 			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'style' ) ) ?>"><?php _ex( 'Media/Thumbnail', 'admin', 'superpack' ) ?></label>
-			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'style' ) ) ?>"
-			        name="<?php echo esc_attr( $this->get_field_name( 'style' ) ) ?>">
-				<?php
-				foreach ( $styles as $key => $label ) {
-					echo '<option value="' . esc_attr( $key ) . '"' . selected( $this->get_style( $instance ), $key, false ) . '>' . $label . '</option>';
-				}
-				?>
-			</select>
-		</p>
-
-		<p>
-			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'number' ) ); ?>"><?php _ex( 'Number of items to show:', 'admin', 'superpack' ); ?></label>
+				for="<?php echo esc_attr( $this->get_field_id( 'number' ) ); ?>"><?php echo esc_html_x( 'Number of items to show:', 'admin', 'superpack' ); ?></label>
 			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'number' ) ); ?>"
 			        name="<?php echo esc_attr( $this->get_field_name( 'number' ) ); ?>">
 				<?php
@@ -221,7 +163,7 @@ class Superpack_Widget_Posts extends WP_Widget {
 				?>
 			</select>
 		</p>
-	<?php
+		<?php
 	}
 
 	public function update( $new_instance, $old_instance ) {
@@ -229,7 +171,6 @@ class Superpack_Widget_Posts extends WP_Widget {
 
 		$instance['title']  = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
 		$instance['filter'] = array_key_exists( $new_instance['filter'], $this->post_filters() ) ? $new_instance['filter'] : 'recent';
-		$instance['style']  = array_key_exists( $new_instance['style'], $this->post_styles() ) ? $new_instance['style'] : 'large';
 		$instance['number'] = absint( $new_instance['number'] );
 
 		$this->flush_cache();
@@ -271,10 +212,6 @@ class Superpack_Widget_Posts extends WP_Widget {
 		return $data;
 	}
 
-	public function get_style( $instance ) {
-		return ( ! empty( $instance['style'] ) ) ? strip_tags( $instance['style'] ) : 'small';
-	}
-
 	public function get_title( $instance ) {
 		$title = ( ! empty( $instance['title'] ) ) ? strip_tags( $instance['title'] ) : '';
 
@@ -283,23 +220,15 @@ class Superpack_Widget_Posts extends WP_Widget {
 
 	public function post_filters() {
 		return array(
-			'recent'  => __( 'Recent Posts', 'superpack' ),
-			'random'  => __( 'Random Posts', 'superpack' ),
-			'sticky'  => __( 'Sticky Posts', 'superpack' ),
-			'related' => __( 'Related Posts', 'superpack' ),
-		);
-	}
-
-	public function post_styles() {
-		return array(
-			'none'  => _x( 'None', 'admin', 'superpack' ),
-			'small' => _x( 'Small', 'admin', 'superpack' ),
-			'large' => _x( 'Large', 'admin', 'superpack' ),
+			'recent'  => esc_html__( 'Recent Posts', 'superpack' ),
+			'random'  => esc_html__( 'Random Posts', 'superpack' ),
+			'sticky'  => esc_html__( 'Sticky Posts', 'superpack' ),
+			'related' => esc_html__( 'Related Posts', 'superpack' ),
 		);
 	}
 
 	public function posts_recent( $count = 5, $cache = true ) {
-		$count      = 0 < intval( $count ) ? $count : 5;
+		$count = 0 < intval( $count ) ? $count : 5;
 
 		$cache_key  = Superpack()->cache_key( 'd', 'recent_posts' . $count );
 		$cache_time = apply_filters( 'superpack_recent_posts_cache_time', MINUTE_IN_SECONDS );
@@ -325,7 +254,7 @@ class Superpack_Widget_Posts extends WP_Widget {
 	}
 
 	public function posts_random( $count = 5, $cache = true ) {
-		$count         = 0 < intval( $count ) ? $count : 5;
+		$count = 0 < intval( $count ) ? $count : 5;
 
 		$cache_key  = Superpack()->cache_key( 'd', 'random_posts' . $count );
 		$cache_time = apply_filters( 'superpack_random_posts_cache_time', MINUTE_IN_SECONDS );
@@ -358,7 +287,7 @@ class Superpack_Widget_Posts extends WP_Widget {
 		$current_post_id = 0 < $current_post_id ? $current_post_id : get_the_ID();
 
 		if ( ! is_single() || 1 > $current_post_id ) {
-			return new WP_Error( 'skipped', __( 'No posts to show.', 'superpack' ) );
+			return new WP_Error( 'skipped', esc_html__( 'No posts to show.', 'superpack' ) );
 		}
 
 		$cache_key  = Superpack()->cache_key( 'd', 'related_posts' . $count . $current_post_id );
@@ -404,12 +333,12 @@ class Superpack_Widget_Posts extends WP_Widget {
 	}
 
 	public function posts_sticky( $count = 5, $cache = true ) {
-		$count  = 0 < intval( $count ) ? $count : 5;
+		$count = 0 < intval( $count ) ? $count : 5;
 
 		$sticky = get_option( 'sticky_posts' );
 
 		if ( empty( $sticky ) ) {
-			return new WP_Error( 'no_sticky', __( 'No sticky posts found.', 'superpack' ) );
+			return new WP_Error( 'no_sticky', esc_html__( 'No sticky posts found.', 'superpack' ) );
 		}
 
 		$cache_key  = Superpack()->cache_key( 'd', 'sticky_posts' . $count . count( $sticky ) );

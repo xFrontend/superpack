@@ -4,22 +4,16 @@ if ( ! defined( 'ABSPATH' ) ) :
 	exit; // Exit if accessed directly
 endif;
 
-add_action( 'widgets_init', 'superpack_register_widget_instagram' );
-
-function superpack_register_widget_instagram() {
-	register_widget( 'Superpack_Widget_Instagram' );
-}
-
 class Superpack_Widget_Instagram extends WP_Widget {
 
 	public function __construct() {
 
 		parent::__construct(
 			'superpack-widget-instagram',
-			_x( 'Instagram (SuperPack)', 'admin', 'superpack' ),
+			esc_html_x( 'Instagram (SuperPack)', 'admin', 'superpack' ),
 			array(
-				'classname'   => 'sp-widget sp-widget-instagram',
-				'description' => _x( 'Display your latest Instagram photos on your site.', 'admin', 'superpack' ),
+				'classname'   => 'superpack__widget superpack__widget-instagram',
+				'description' => esc_html_x( 'Display your latest Instagram photos on your site.', 'admin', 'superpack' ),
 			)
 		);
 
@@ -27,7 +21,7 @@ class Superpack_Widget_Instagram extends WP_Widget {
 	}
 
 	public function widget( $args, $instance ) {
-		$cache = wp_cache_get( $this->id_base, 'sp-widget' );
+		$cache = wp_cache_get( $this->id_base, 'superpack__widget' );
 
 		if ( ! is_array( $cache ) ) {
 			$cache = array();
@@ -54,7 +48,7 @@ class Superpack_Widget_Instagram extends WP_Widget {
 			//--$title = '<a href="http://instagram.com/' . sanitize_title( $username ) . '" class="instagram-profile-link">' . $title . '</a>';
 			$content .= $args['before_title'] . $title . $args['after_title'];
 		} else {
-			$content .= '<h3 class="screen-reader-text">' . __( 'Instagram Photos', 'superpack' ) . '</h3>';
+			$content .= '<h3 class="screen-reader-text">' . esc_html__( 'Instagram Photos', 'superpack' ) . '</h3>';
 		}
 
 		$data = self::instagram_data( $username, $number );
@@ -63,22 +57,25 @@ class Superpack_Widget_Instagram extends WP_Widget {
 			$content .= '<div class="gallery gallery-columns-' . esc_attr( $columns ) . '" >';
 
 			foreach ( $data as $item ) {
-				$image = 3 < $columns ? $item['thumbnail']['url'] : $item['medium']['url'];
+				if ( ! empty( $item['is_video'] ) ) {
+					continue;
+				}
 
-				$content .= '<figure class="gallery-item sp-media-container">';
-					$content .= '<a href="' . esc_url( $item['link'] ) . '" target="_blank"><img src="' . esc_url( $image ) . '" alt=""></a>';
-					//--$content .= '<a class="sp-thumb-overlay" href="' . esc_url( $item['link'] ) . '" target="_blank"><span class="fa-external-link-square"></span></a>';
+				$image = $item['thumbnail'];
+
+				$content .= '<figure class="gallery-item superpack__thumbnail">';
+				$content .= '<a href="' . esc_url( $item['link'] ) . '" target="_blank"><img src="' . esc_url( $image ) . '" alt=""></a>';
 				$content .= '</figure>';
 			}
 
 			$content .= '</div>';
 		} elseif ( is_wp_error( $data ) ) {
-			$content .= '<div class="sp-instagram-container">';
-				$content .= '<span class="error">' . $data->get_error_message() . '</span>';
+			$content .= '<div class="superpack__instagram-container">';
+			$content .= '<span class="error">' . $data->get_error_message() . '</span>';
 			$content .= '</div>';
 		} else {
-			$content .= '<div class="sp-instagram-container">';
-				$content .= '<span class="error">' . __( 'Nothing to show.', 'superpack' ) . '</span>';
+			$content .= '<div class="superpack__instagram-container">';
+			$content .= '<span class="error">' . esc_html__( 'Nothing to show.', 'superpack' ) . '</span>';
 			$content .= '</div>';
 		}
 
@@ -86,7 +83,7 @@ class Superpack_Widget_Instagram extends WP_Widget {
 
 		$cache[ $args['widget_id'] ] = $content;
 
-		wp_cache_set( $this->id_base, $cache, 'sp-widget' );
+		wp_cache_set( $this->id_base, $cache, 'superpack__widget' );
 
 		echo $content;
 	}
@@ -97,7 +94,7 @@ class Superpack_Widget_Instagram extends WP_Widget {
 
 		delete_transient( $cache_key );
 
-		wp_cache_delete( $this->id_base, 'sp-widget' );
+		wp_cache_delete( $this->id_base, 'superpack__widget' );
 	}
 
 	public function form( $instance ) {
@@ -108,7 +105,7 @@ class Superpack_Widget_Instagram extends WP_Widget {
 		?>
 		<p>
 			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _ex( 'Title:', 'admin', 'superpack' ); ?></label>
+				for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php echo esc_html_x( 'Title:', 'admin', 'superpack' ); ?></label>
 			<input type="text" class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"
 			       name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"
 			       value="<?php echo esc_attr( $title ); ?>">
@@ -116,7 +113,7 @@ class Superpack_Widget_Instagram extends WP_Widget {
 
 		<p>
 			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'username' ) ); ?>"><?php _ex( 'Instagram Username:', 'admin', 'superpack' ); ?></label>
+				for="<?php echo esc_attr( $this->get_field_id( 'username' ) ); ?>"><?php echo esc_html_x( 'Instagram Username:', 'admin', 'superpack' ); ?></label>
 			<input type="text" class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'username' ) ); ?>"
 			       name="<?php echo esc_attr( $this->get_field_name( 'username' ) ); ?>"
 			       value="<?php echo esc_attr( $username ); ?>">
@@ -124,7 +121,7 @@ class Superpack_Widget_Instagram extends WP_Widget {
 
 		<p>
 			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'columns' ) ); ?>"><?php _ex( 'Columns:', 'admin', 'superpack' ); ?></label>
+				for="<?php echo esc_attr( $this->get_field_id( 'columns' ) ); ?>"><?php echo esc_html_x( 'Columns:', 'admin', 'superpack' ); ?></label>
 			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'columns' ) ); ?>"
 			        name="<?php echo esc_attr( $this->get_field_name( 'columns' ) ); ?>">
 				<?php
@@ -137,7 +134,7 @@ class Superpack_Widget_Instagram extends WP_Widget {
 
 		<p>
 			<label
-				for="<?php echo esc_attr( $this->get_field_id( 'number' ) ); ?>"><?php _ex( 'Number of items to show:', 'admin', 'superpack' ); ?></label>
+				for="<?php echo esc_attr( $this->get_field_id( 'number' ) ); ?>"><?php echo esc_html_x( 'Number of items to show:', 'admin', 'superpack' ); ?></label>
 			<select class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'number' ) ); ?>"
 			        name="<?php echo esc_attr( $this->get_field_name( 'number' ) ); ?>">
 				<?php
@@ -147,7 +144,7 @@ class Superpack_Widget_Instagram extends WP_Widget {
 				?>
 			</select>
 		</p>
-	<?php
+		<?php
 	}
 
 	public function update( $new_instance, $old_instance ) {
@@ -192,27 +189,27 @@ class Superpack_Widget_Instagram extends WP_Widget {
 			$instagram = array();
 			$array     = self::instagram_fetch( $username );
 
-			if ( ! is_wp_error( $array ) && isset( $array['entry_data']['UserProfile'][0]['userMedia'] ) ) {
+			if ( ! is_wp_error( $array ) && isset( $array['entry_data']['ProfilePage'][0]['user']['media']['nodes'] ) ) {
 
-				$data = $array['entry_data']['UserProfile'][0]['userMedia'];
+				$data = $array['entry_data']['ProfilePage'][0]['user']['media']['nodes'];
+
+				$user_id = $array['entry_data']['ProfilePage'][0]['user']['id'];
 
 				foreach ( $data as $image ) {
-					if ( $username == $image['user']['username'] ) {
-						$image['link']                          = preg_replace( '/^http:/i', '', $image['link'] );
-						$image['images']['thumbnail']           = preg_replace( '/^http:/i', '', $image['images']['thumbnail'] ); // 150x150
-						$image['images']['low_resolution']      = preg_replace( '/^http:/i', '', $image['images']['low_resolution'] ); // 306x306
-						$image['images']['standard_resolution'] = preg_replace( '/^http:/i', '', $image['images']['standard_resolution'] ); // 640x640
+					if ( $user_id == $image['owner']['id'] ) {
+						$image['link'] = 'https://instagram.com/p/' . $image['code'] . '/';
 
 						$instagram[] = array(
+							'id'          => $image['id'],
 							'link'        => $image['link'],
-							'type'        => $image['type'],
-							'description' => $image['caption']['text'],
-							'time'        => $image['created_time'],
+							'is_video'    => $image['is_video'],
+							'description' => $image['caption'],
+							'time'        => $image['date'],
 							'likes'       => $image['likes']['count'],
 							'comments'    => $image['comments']['count'],
-							'thumbnail'   => $image['images']['thumbnail'],
-							'medium'      => $image['images']['low_resolution'],
-							'large'       => $image['images']['standard_resolution'],
+							'thumbnail'   => $image['display_src'],
+							'medium'      => $image['display_src'],
+							'large'       => $image['display_src'],
 						);
 					}
 				}
@@ -249,17 +246,17 @@ class Superpack_Widget_Instagram extends WP_Widget {
 		$username = trim( $username );
 
 		if ( empty( $username ) || 2 >= strlen( $username ) ) {
-			return new WP_Error( 'bad_username', __( 'Instagram username is too short.', 'superpack' ) );
+			return new WP_Error( 'bad_username', esc_html__( 'Instagram username is too short.', 'superpack' ) );
 		}
 
 		$remote = wp_remote_get( 'http://instagram.com/' . trim( $username ) );
 
 		if ( is_wp_error( $remote ) ) {
-			return new WP_Error( 'site_down', __( 'Unable to communicate with Instagram.', 'superpack' ) );
+			return new WP_Error( 'site_down', esc_html__( 'Unable to communicate with Instagram.', 'superpack' ) );
 		}
 
 		if ( 200 != wp_remote_retrieve_response_code( $remote ) ) {
-			return new WP_Error( 'invalid_response', __( 'Instagram did not return a 200.', 'superpack' ) );
+			return new WP_Error( 'invalid_response', esc_html__( 'Instagram did not return a 200.', 'superpack' ) );
 		}
 
 		$shards = explode( 'window._sharedData = ', $remote['body'] );
@@ -271,7 +268,7 @@ class Superpack_Widget_Instagram extends WP_Widget {
 		if ( isset( $json[0] ) ) {
 			return json_decode( $json[0], true );
 		} else {
-			return new WP_Error( 'bad_json', __( 'Instagram has returned invalid data.', 'superpack' ) );
+			return new WP_Error( 'bad_json', esc_html__( 'Instagram has returned invalid data.', 'superpack' ) );
 		}
 	}
 }

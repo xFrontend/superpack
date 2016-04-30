@@ -1,11 +1,11 @@
 <?php
 /*
  * Plugin Name: SuperPack
- * Version: 0.1.0
- * Plugin URI: http://wordpress.org/extend/plugins/superpack/
+ * Version: 0.2.2
+ * Plugin URI: https://xfrontend.com/plugins/superpack/
  * Description: Provides a backend to supercharge your site.
- * Author: Splendous
- * Author URI: http://splendo.us/
+ * Author: xFrontend
+ * Author URI: http://xfrontend.com/
  * Text Domain: superpack
  * Domain Path: /languages/
  * License: GPL v3
@@ -13,7 +13,7 @@
 
 /**
  * SuperPack
- * Copyright (C) 2015, Omaar Osmaan - omo@splendo.us
+ * Copyright (C) 2015, Omaar Osmaan - omo@xfrontend.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,11 +34,11 @@ if ( ! defined( 'ABSPATH' ) ) :
 endif;
 
 if ( ! defined( 'SUPERPACK__PLUGIN_DIR' ) ) {
-	define( 'SUPERPACK__PLUGIN_DIR',  untrailingslashit( plugin_dir_path( __FILE__ ) ) );
+	define( 'SUPERPACK__PLUGIN_DIR', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 }
 
 if ( ! defined( 'SUPERPACK__ASSETS_URI' ) ) {
-	define( 'SUPERPACK__ASSETS_URI',  untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/assets'  );
+	define( 'SUPERPACK__ASSETS_URI', untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/assets' );
 }
 
 if ( ! defined( 'SUPERPACK__CSSJS_SUFFIX' ) ) {
