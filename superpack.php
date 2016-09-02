@@ -1,11 +1,11 @@
 <?php
 /*
  * Plugin Name: SuperPack
- * Version: 0.2.2
+ * Version: 0.3
  * Plugin URI: https://xfrontend.com/plugins/superpack/
  * Description: Provides a backend to supercharge your site.
  * Author: xFrontend
- * Author URI: http://xfrontend.com/
+ * Author URI: https://xfrontend.com/
  * Text Domain: superpack
  * Domain Path: /languages/
  * License: GPL v3
@@ -13,7 +13,7 @@
 
 /**
  * SuperPack
- * Copyright (C) 2015, Omaar Osmaan - omo@xfrontend.com
+ * Copyright (C) 2015-2016, Omaar Osmaan - omo@xfrontend.com
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
