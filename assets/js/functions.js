@@ -2,11 +2,9 @@
     'use strict';
 
     $(document).ready(function () {
-        var button_select = $('.superpack__media-select'),
-            button_clear = $('.superpack__media-clear'),
-            media_frame;
+        var media_frame;
 
-        button_select.live('click', function (e) {
+        $(document).on('click', '.superpack__media-select', function (e) {
             e.preventDefault();
 
             var button_text = $(this).data('button-text') ? $(this).data('button-text') : 'Select',
@@ -15,14 +13,13 @@
                 is_multiple = $(this).data('multiple') ? true : false,
                 container = $(this).parents('.superpack__uploader'),
                 input = container.find('input'),
-
                 media_html = function (attachments) {
                     var html = '';
 
                     _.each(attachments, function (attachment) {
                         if ('image' === filter) {
                             html += '<img ';
-                            html += ' src="' + attachment.url + '" '; // ' src="' + attachment.sizes.thumbnail.url + '" ' :
+                            html += ' src="' + attachment.url + '" ';
                             html += is_multiple ? ' width="106" ' : '';
                             html += '>';
                         }
@@ -78,7 +75,7 @@
             media_frame.open();
         });
 
-        button_clear.live('click', function () {
+        $(document).on('click', '.superpack__media-clear', function () {
             var container = $(this).parents('.superpack__uploader');
 
             container.find('input').val('');
