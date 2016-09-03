@@ -9,6 +9,8 @@ endif;
  * Includes SuperPack core
  */
 require SUPERPACK__PLUGIN_DIR . '/class-superpack.php';
+require SUPERPACK__PLUGIN_DIR . '/inc/helpers.php';
+require SUPERPACK__PLUGIN_DIR . '/inc/contact-fields.php';
 
 
 /**

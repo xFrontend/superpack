@@ -50,6 +50,11 @@ final class Superpack {
 					'menu_class'      => 'superpack__social',
 					'icons'           => false,
 				),
+				'contact_fields'         => array(
+					'container_class' => 'suerpack__user-links',
+					'action_hooks'    => 'superpack_user_links',
+					'enable'          => true,
+				),
 			);
 
 			$supports = get_theme_support( 'superpack' );
@@ -130,6 +135,30 @@ final class Superpack {
 									'container_class' => self::get_html_classes( $container_class, $defaults['social_icons']['container_class'] ),
 									'menu_class'      => self::get_html_classes( $menu_class, $defaults['social_icons']['menu_class'] ),
 									'icons'           => isset( $value['icons'] ) ? $value['icons'] : true,
+								);
+
+								break;
+
+							case 'contact_fields' :
+
+								if ( false === $value ) {
+									/**
+									 * Bail early.
+									 */
+									$settings[ $key ] = array(
+										'enable' => false,
+									);
+
+									break;
+								}
+
+								$container_class = isset( $value['container_class'] ) ? $value['container_class'] : array();
+								$action_hooks    = isset( $value['action_hooks'] ) ? $value['action_hooks'] : $defaults['contact_fields']['action_hooks'];
+
+								$settings[ $key ] = array(
+									'container_class' => self::get_html_classes( $container_class, $defaults['contact_fields']['container_class'] ),
+									'action_hooks'    => is_array( $action_hooks ) ? array_unique( $action_hooks ) : (array) $action_hooks,
+									'enable'          => isset( $value['enable'] ) ? $value['enable'] : true,
 								);
 
 								break;
