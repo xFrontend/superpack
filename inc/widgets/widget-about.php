@@ -50,7 +50,7 @@ class Superpack_Widget_About extends WP_Widget {
 		if ( 0 < $attachment_id ) {
 			$thumbs = wp_get_attachment_image(
 				$attachment_id,
-				apply_filters( 'superpack_widget_about_image_size', Superpack()->get_settings()->image_size_about, $attachment_id )
+				apply_filters( 'superpack_widget_about_image_size', Superpack()->settings()->image_size_about, $attachment_id )
 			);
 		}
 
@@ -127,10 +127,10 @@ class Superpack_Widget_About extends WP_Widget {
 				        data-button-title="<?php echo esc_attr_x( 'Select an Image', 'admin', 'superpack' ) ?>"
 				        data-button-text="<?php echo esc_attr_x( 'Insert to the Widget', 'admin', 'superpack' ) ?>"
 				        data-filter="image"
-					><?php echo esc_html_x( 'Select Image', 'admin', 'superpack' ); ?></button>
+				><?php echo esc_html_x( 'Select Image', 'admin', 'superpack' ); ?></button>
 
 				<button type="button"
-				        class="superpack__button superpack__media-clear<?php if ( ! isset( $thumbs[0] ) ): ?> hide-if-js<?php endif; ?>"><?php echo esc_html_x( 'Remove Image', 'admin', 'superpack' ); ?></button>
+				        class="button superpack__media-clear<?php if ( ! isset( $thumbs[0] ) ): ?> hide-if-js<?php endif; ?>"><?php echo esc_html_x( 'Remove Image', 'admin', 'superpack' ); ?></button>
 			</p>
 
 			<div class="image-preview">
@@ -202,7 +202,7 @@ class Superpack_Widget_About extends WP_Widget {
 		/**
 		 * JavaScript
 		 */
-		$ext_js = '.js'; // SUPERPACK__CSSJS_SUFFIX . '.js';
+		$ext_js = SUPERPACK__CSSJS_SUFFIX . '.js';
 
 		wp_enqueue_media();
 

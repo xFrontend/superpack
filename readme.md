@@ -1,5 +1,10 @@
 # SuperPack
+
 Provides half a dozen Shortcodes, including half a dozen Widgets, to supercharge your blog/site.
+
+* Author: xFrontend
+* Author URI: https://xfrontend.com/
+* Plugin URI: https://xfrontend.com/plugins/superpack/
 
 ## Shortcodes
 
@@ -45,10 +50,10 @@ Manual installation:
 
 Installation from WordPress.org repository using "Add New Plugin"
 
-1. From your Admin UI (Dashboard), use the menu to select Plugins -> Add New
-1. Search for 'SuperPack'
-1. Click the 'Install' button to open the plugin's repository listing
-1. Click the 'Install' button
+1. From your Admin Dashboard, use the menu to select Plugins -> Add New
+1. Search for `SuperPack`
+1. Click the `Install` button
+1. Click the `Activate` button
 
 
 ## Frequently Asked Questions

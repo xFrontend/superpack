@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) :
 	exit; // Exit if accessed directly
 endif;
 
+
 /**
  * Includes SuperPack core
  */
@@ -55,7 +56,7 @@ function superpack_enqueue() {
 	 * Load Shortcodes CSS if the active theme tell us nothing about it.
 	 * We've only added CSS for row/column (grid) for sanity.
 	 */
-	if ( Superpack()->get_settings()->enqueue_shortcodes_css ) {
+	if ( Superpack()->settings()->enqueue_shortcodes_css ) {
 
 		wp_enqueue_style(
 			Superpack()->codename( 'shortcodes-style' ),
@@ -69,7 +70,7 @@ function superpack_enqueue() {
 	/**
 	 * Load Widgets CSS if the active theme isn't smart enough to tell us not to- ;)
 	 */
-	if ( Superpack()->get_settings()->enqueue_widgets_css ) {
+	if ( Superpack()->settings()->enqueue_widgets_css ) {
 
 		wp_enqueue_style(
 			Superpack()->codename( 'widgets-style' ),

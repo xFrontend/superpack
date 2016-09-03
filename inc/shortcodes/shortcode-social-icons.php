@@ -15,7 +15,7 @@ class Superpack_Shortcode_Social_Icons extends Superpack_Shortcode {
 		), $attr, $shortcode_tag );
 
 		$attr->class     = preg_split( '#\s+#', $attr->class );
-		$container_class = preg_split( '#\s+#', Superpack()->get_settings()->social_icons_container_class );
+		$container_class = preg_split( '#\s+#', Superpack()->settings()->social_icons['container_class'] );
 
 		$classes = array_merge( $container_class, $attr->class );
 
@@ -35,15 +35,15 @@ class Superpack_Shortcode_Social_Icons extends Superpack_Shortcode {
 			'container_class' => $attr->class,
 			'depth'           => 1,
 			'menu'            => $menu,
-			'menu_class'      => Superpack()->get_settings()->social_icons_class,
+			'menu_class'      => Superpack()->settings()->social_icons['menu_class'],
 			'items_wrap'      => '<ul class="%2$s">%3$s</ul>',
 			'echo'            => false
 		);
 
 		/**
-		 * if active theme supports it
+		 * Hide menu texts if the active theme gave us green light.
 		 */
-		if ( Superpack()->get_settings()->social_icons ) {
+		if ( Superpack()->settings()->social_icons['icons'] ) {
 			$menu_args['link_before'] = '<span class="screen-reader-text">';
 			$menu_args['link_after']  = '</span>';
 		}

@@ -43,7 +43,7 @@ class Superpack_Widget_Comments extends WP_Widget {
 
 		$title  = $this->get_title( $instance );
 		$number = $this->get_number( $instance );
-		$avatar = apply_filters( 'superpack_widget_comment_avatar_size', Superpack()->get_settings()->comment_avatar_size );
+		$avatar = apply_filters( 'superpack_widget_comment_avatar_size', Superpack()->settings()->comment_avatar_size );
 
 		$comments = get_comments( array(
 			'number'      => $number,

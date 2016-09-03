@@ -56,18 +56,18 @@ class Superpack_Widget_Social_Icons extends WP_Widget {
 		$menu_args = array(
 			'fallback_cb'     => '',
 			'container'       => 'nav',
-			'container_class' => Superpack()->get_settings()->social_icons_container_class,
+			'container_class' => Superpack()->settings()->social_icons['container_class'],
 			'depth'           => 1,
 			'menu'            => $menu,
-			'menu_class'      => Superpack()->get_settings()->social_icons_class,
+			'menu_class'      => Superpack()->settings()->social_icons['menu_class'],
 			'items_wrap'      => '<ul class="%2$s">%3$s</ul>',
 			'echo'            => false
 		);
 
 		/**
-		 * if active theme supports it
+		 * Hide menu texts if the active theme gave us green light.
 		 */
-		if ( Superpack()->get_settings()->social_icons ) {
+		if ( Superpack()->settings()->social_icons['icons'] ) {
 			$menu_args['link_before'] = '<span class="screen-reader-text">';
 			$menu_args['link_after']  = '</span>';
 		}

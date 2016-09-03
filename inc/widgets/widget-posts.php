@@ -77,7 +77,7 @@ class Superpack_Widget_Posts extends WP_Widget {
 				$content .= '<li>';
 
 				$thumb_id   = get_post_thumbnail_id() ? get_post_thumbnail_id() : 0;
-				$thumb_size = apply_filters( 'superpack_widget_posts_image_size', Superpack()->get_settings()->image_size_posts, $thumb_id );
+				$thumb_size = apply_filters( 'superpack_widget_posts_image_size', Superpack()->settings()->image_size_posts, $thumb_id );
 
 				if ( 0 < $thumb_id && ! post_password_required() ) {
 

@@ -12,7 +12,6 @@
                 filter = $(this).data('filter') ? $(this).data('filter') : '',
                 is_multiple = $(this).data('multiple') ? true : false,
                 container = $(this).parents('.superpack__uploader'),
-                input = container.find('input'),
                 media_html = function (attachments) {
                     var html = '';
 
@@ -41,7 +40,7 @@
 
             media_frame.on('open', function () {
                 var selection = media_frame.state().get('selection'),
-                    ids = input.val(),
+                    ids = container.find('input').val(),
                     attachment;
 
                 if (ids) {
@@ -67,9 +66,8 @@
 
                 container.find('.image-preview').html(media_html(preview));
                 container.find('.superpack__media-clear').show();
-
-                input.val(ids);
-                input.trigger('change');
+                container.find('input').val(ids);
+                container.find('input').trigger('change');
             });
 
             media_frame.open();

@@ -1,14 +1,15 @@
 <?php
-/*
+/**
  * Plugin Name: SuperPack
- * Version: 0.3
- * Plugin URI: https://xfrontend.com/plugins/superpack/
- * Description: Provides a backend to supercharge your site.
  * Author: xFrontend
  * Author URI: https://xfrontend.com/
+ * Plugin URI: https://xfrontend.com/plugins/superpack/
+ * Description: Provides a backend to supercharge your site.
  * Text Domain: superpack
  * Domain Path: /languages/
- * License: GPL v3
+ * Version: 0.3
+ * License: GPLv3
+ * License URI: http://www.gnu.org/licenses/gpl.html
  */
 
 /**

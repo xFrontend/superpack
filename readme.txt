@@ -1,11 +1,13 @@
 === SuperPack ===
-Contributors: moonomo, xFrontend
-License: GPLv3
-License URI: http://www.gnu.org/licenses/gpl.html
+
+Contributors: xFrontend, moonomo
+Donate link: https://xfrontend.com/
 Tags: blockquote, column, dropcap, instagram, random posts, recent comments, recent posts, related posts, row, shortcodes, social icons, sticky posts, widgets
 Requires at least: 4.1
-Tested up to: 4.5
-Stable tag: 0.2.2
+Tested up to: 4.6
+Stable tag: 0.3
+License: GPLv3
+License URI: http://www.gnu.org/licenses/gpl.html
 
 Features half-dozen Shortocdes, and half-dozen Widgets to supercharge your blog/site.
 
@@ -15,24 +17,24 @@ Provides half a dozen Shortcodes, including half a dozen Widgets, to supercharge
 
 = Shortcodes =
 
-* [dropcap] - Add capital letter at the beginning of a text block that has the depth of two or more lines of regular text.
-* [blockquote] - Add quotes that floats to the left, or right side of the content, including non-floating blockquote.
-* [code] - Display Code on your blog.
-* [column] - Split content into columns with responsive grid-system.
-* [row] - Group columns into row.
-* [social-icons] - Add your social links with icons.
+* `[dropcap]` - Add capital letter at the beginning of a text block that has the depth of two or more lines of regular text.
+* `[blockquote]` - Add quotes that floats to the left, or right side of the content, including non-floating blockquote.
+* `[code]` - Display Code on your blog.
+* `[column]` - Split content into columns with responsive grid-system.
+* `[row]` - Group columns into row.
+* `[social-icons]` - Add your social links with icons.
 
 
 More details on shortcodes are given on [FAQ](https://wordpress.org/plugins/superpack/faq/).
 
 = Widgets =
 
-* About (SuperPack) - Display your bio/site info on your site.
-* Comments (SuperPack) - Display the most recent comments (with Gravatar).
-* Instagram (SuperPack) - Display your latest Instagram photos on your site.
-* Posts (SuperPack) - Display the blog posts with thumbnails. Includes Recent Posts, Random Posts, Sticky Posts and Related Posts
-* Social Icons (SuperPack) - Display social profile link icons (require theme supports).
-* Tags (SuperPack) - Display your most used tags.
+* `About (SuperPack)` - Display your bio/site info on your site.
+* `Comments (SuperPack)` - Display the most recent comments (with Gravatar).
+* `Instagram (SuperPack)` - Display your latest Instagram photos on your site.
+* `Posts (SuperPack)` - Display the blog posts with thumbnails. Includes Recent Posts, Random Posts, Sticky Posts and Related Posts
+* `Social Icons (SuperPack)` - Display social profile link icons (require theme supports).
+* `Tags (SuperPack)` - Display your most used tags.
 
 = What it does & doesn't =
 
@@ -53,14 +55,14 @@ Provided as is without any support. However feel free to reach the author for fe
 
 Manual installation:
 
-1. Upload the `superpack` folder to the `/wp-content/plugins/` directory
+1. [Download](https://github.com/xFrontend/SuperPack/archive/master.zip) and extract the zip into your `/wp-content/plugins/` directory.
 
-Installation using "Add New Plugin"
+Installation from WordPress.org repository using "Add New Plugin"
 
-1. From your Admin UI (Dashboard), use the menu to select Plugins -> Add New
-2. Search for 'SuperPack'
-3. Click the 'Install' button to open the plugin's repository listing
-4. Click the 'Install' button
+1. From your Admin Dashboard, use the menu to select Plugins -> Add New
+1. Search for `SuperPack`
+1. Click the `Install` button
+1. Click the `Activate` button
 
 
 == Frequently Asked Questions ==
@@ -114,21 +116,21 @@ Use `[row]` shortcode around `[column]` shortcode to keep columns in a div that 
 
 == Changelog ==
 
-= Version 0.2.2 =
+= v0.2.2 =
 Release Date: November 15, 2015
 
 * Shortcode supports for description field in 'About (SuperPack)' widget.
 * Added unique class for Row shortcode output.
 
 
-= Version 0.2.1 =
+= v0.2.1 =
 Release Date: October 3, 2015
 
 * Fixes - `Select Image` button on 'About (SuperPack)' widget.
 * Fixes - Media query CSS for Row/Column (the Grid).
 
 
-= Version 0.2.0 =
+= v0.2.0 =
 Release Date: September 18, 2015
 
 * Added Shortcodes: [dropcap], [blockquote], [code], [column], [row], [social-icons].
@@ -137,7 +139,7 @@ Release Date: September 18, 2015
 * Added minified Assets (CSS/JS).
 
 
-= Version 0.1.1 =
+= v0.1.1 =
 Release Date: September 8, 2015
 
 * Cleaned up codebase.
@@ -146,5 +148,5 @@ Release Date: September 8, 2015
 * Fixes - Updated Instagram Widget to properly fetch image data.
 
 
-= Version 0.1.0 =
+= v0.1.0 =
 * Initial release.

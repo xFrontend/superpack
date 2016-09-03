@@ -4,8 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) :
 	exit; // Exit if accessed directly
 endif;
 
+
 final class Superpack {
-	const VERSION = '0.1.1';
+	const VERSION = '0.3';
 
 	protected static $instance = null;
 	protected static $settings = null;
@@ -21,41 +22,42 @@ final class Superpack {
 	public function __construct() {
 	}
 
-	public static function codename( $key = null ) {
+	public function codename( $key = null ) {
 		$codename = sanitize_title_with_dashes( get_called_class() );
 
 		return ! is_null( $key ) ? $codename . '-' . sanitize_title_with_dashes( $key ) : $codename;
 	}
 
-	public static function version() {
+	public function version() {
 		return self::VERSION;
 	}
 
-
 	/**
-	 * Settings
+	 * Returns the Settings.
 	 *
 	 * @return object
 	 */
-	public static function get_settings() {
+	public function settings() {
 		if ( is_null( self::$settings ) ) {
 			$settings = $defaults = array(
-				'comment_avatar_size'          => '64',
-				'enqueue_shortcodes_css'       => true,
-				'enqueue_widgets_css'          => true,
-				'image_size_about'             => 'medium',
-				'image_size_posts'             => 'thumbnail',
-				'social_icons'                 => false,
-				'social_icons_container_class' => 'superpack__menu',
-				'social_icons_class'           => 'superpack__social',
+				'comment_avatar_size'    => '64',
+				'enqueue_shortcodes_css' => true,
+				'enqueue_widgets_css'    => true,
+				'image_size_about'       => 'medium',
+				'image_size_posts'       => 'thumbnail',
+				'social_icons'           => array(
+					'container_class' => 'superpack__menu-container',
+					'menu_class'      => 'superpack__social',
+					'icons'           => false,
+				),
 			);
 
-			$_settings = get_theme_support( 'superpack' );
+			$supports = get_theme_support( 'superpack' );
 
-			if ( is_array( $_settings ) ) {
-				if ( isset( $_settings[0] ) && is_array( $_settings[0] ) ) {
+			if ( is_array( $supports ) ) {
+				if ( isset( $supports[0] ) && is_array( $supports[0] ) ) {
 
-					foreach ( $_settings[0] as $key => $value ) {
+					foreach ( $supports[0] as $key => $value ) {
 						switch ( $key ) {
 							case 'comment_avatar_size' :
 								if ( is_numeric( $value ) ) {
@@ -93,40 +95,42 @@ final class Superpack {
 								break;
 
 							case 'social_icons' :
-								if ( is_bool( $value ) ) {
-									$settings[ $key ] = $value;
+
+								if ( false === $value ) {
+									/**
+									 * Set defaults and bail early.
+									 */
+									$settings[ $key ] = array(
+										'container_class' => self::get_html_classes( '', $defaults['social_icons']['container_class'] ),
+										'menu_class'      => self::get_html_classes( '', $defaults['social_icons']['menu_class'] ),
+										'icons'           => false,
+									);
+
+									break;
 								}
 
-								break;
+								/**
+								 * Parse the settings.
+								 */
+								$menu_class      = isset( $value['menu_class'] ) ? $value['menu_class'] : '';
+								$container_class = isset( $value['container_class'] ) ? $value['container_class'] : '';
 
-							case 'social_icons_class' :
-								if ( is_string( $value ) ) {
-									$value = preg_split( '#\s+#', $value );
-								} elseif ( ! is_array( $value ) ) {
-									$value = array();
+								/* Back Compatibility - Check settings for < v0.3 */
+								if ( isset( $supports[0]['social_icons_class'] ) ) {
+									$menu_class = $supports[0]['social_icons_class'];
+								}
+								if ( isset( $supports[0]['social_icons_container_class'] ) ) {
+									$container_class = $supports[0]['social_icons_container_class'];
 								}
 
-								$value = array_merge( array( 'superpack__social' ), $value );
-
-								$settings[ $key ] = trim( join( ' ', array_map( 'sanitize_html_class', array_unique( $value ) ) ) );
-
-								break;
-
-							case 'social_icons_container_class' :
-								if ( is_string( $value ) ) {
-									$value = preg_split( '#\s+#', $value );
-								} elseif ( ! is_array( $value ) ) {
-									$value = array();
-								}
-
-								$value = array_merge( array( 'superpack__icons-menu' ), $value );
-
-								$settings[ $key ] = trim( join( ' ', array_map( 'sanitize_html_class', array_unique( $value ) ) ) );
-
-								break;
-
-							default:
-								continue;
+								/**
+								 * Finalize Settings
+								 */
+								$settings[ $key ] = array(
+									'container_class' => self::get_html_classes( $container_class, $defaults['social_icons']['container_class'] ),
+									'menu_class'      => self::get_html_classes( $menu_class, $defaults['social_icons']['menu_class'] ),
+									'icons'           => isset( $value['icons'] ) ? $value['icons'] : true,
+								);
 
 								break;
 						}
@@ -137,16 +141,35 @@ final class Superpack {
 
 			$settings = wp_parse_args( $settings, $defaults );
 
-			// Store settings in class static to avoid reparsing
-			self::$settings = apply_filters( 'supperpack_settings', $settings );
+			/**
+			 * Store settings in class static to avoid multiple parsing
+			 */
+			self::$settings = (object) apply_filters( 'supperpack_settings', $settings );
 		}
 
-		return (object) self::$settings;
+		return self::$settings;
 	}
 
-	//
-	// Helpers
-	//
+	/**
+	 * Checks and returns escaped HTML classes.
+	 *
+	 * @param $value
+	 * @param array $default
+	 *
+	 * @return string
+	 */
+	public function get_html_classes( $value, $default = null ) {
+
+		if ( is_string( $value ) ) {
+			$value = preg_split( '#\s+#', $value );
+		} elseif ( ! is_array( $value ) ) {
+			$value = array();
+		}
+
+		$value = array_merge( (array) $default, $value );
+
+		return trim( join( ' ', array_map( 'sanitize_html_class', array_unique( $value ) ) ) );
+	}
 
 	/**
 	 * Helper to prepare name for generating cache.
@@ -156,7 +179,7 @@ final class Superpack {
 	 *
 	 * @return string
 	 */
-	public static function cache_key( $group, $key ) {
+	public function cache_key( $group, $key ) {
 		return substr( self::codename(), 0, 6 ) . '-' . substr( $group, 0, 4 ) . '-' . md5( self::version() . $key );
 	}
 
@@ -165,7 +188,7 @@ final class Superpack {
 	 *
 	 * @return string
 	 */
-	public static function cache_group() {
+	public function cache_group() {
 		return self::codename() . '_' . self::version();
 	}
 
@@ -176,15 +199,11 @@ final class Superpack {
 	 *
 	 * @return string
 	 */
-	public static function protocol( $url ) {
+	public function protocol( $url ) {
 		$url = str_replace( array( 'http://', 'https://' ), '//', $url );
 
 		return esc_url( $url );
 	}
-
-	//
-	// Conditional Helpers
-	//
 
 	/**
 	 * Detect Browser/OS
@@ -193,7 +212,7 @@ final class Superpack {
 	 *
 	 * @return bool
 	 */
-	public static function is_current_agent( $query ) {
+	public function current_agent( $query ) {
 		if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
 			return false;
 		}
