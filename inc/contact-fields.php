@@ -135,7 +135,7 @@ add_action( 'after_setup_theme', 'superpack_contact_fields_callback', 999 );
  *
  * @param array $args
  */
-function superpack_contact_fields_markup( $args = array() ) {
+function superpack_contact_fields_markup( $user_id ) {
 
 	/**
 	 * Bail early if Contact Feilds are not enabled.
@@ -144,12 +144,12 @@ function superpack_contact_fields_markup( $args = array() ) {
 		return;
 	}
 
-	if ( ! isset( $args['user_id'] ) || isset( $args['user_id'] ) && $args['user_id'] < 1 ) {
-		$args['user_id'] = get_the_author_meta( 'ID' );
+	if ( $user_id < 1 ) {
+		$user_id = get_the_author_meta( 'ID' );
 	}
 
 	$html    = '';
-	$user_id = apply_filters( 'superpack_contact_fields_user_id', $args['user_id'] );
+	$user_id = apply_filters( 'superpack_contact_fields_user_id', $user_id );
 	$fields  = superpack_contact_fields();
 
 	if ( is_array( $fields ) ) {
@@ -171,8 +171,8 @@ function superpack_contact_fields_markup( $args = array() ) {
 			/**
 			 * Pass $field through the filters.
 			 */
-			$field = apply_filters( 'superpack_contact_field', $field, $key );
-			$field = apply_filters( 'superpack_contact_field_{$key}', $field );
+			$field = apply_filters( 'superpack_contact_field', $field, $key, $user_id );
+			$field = apply_filters( 'superpack_contact_field_{$key}', $field, $user_id );
 
 			/**
 			 * Each field must have title.
@@ -187,7 +187,7 @@ function superpack_contact_fields_markup( $args = array() ) {
 			$attr = apply_filters( 'superpack_contact_fields_attributes', array(
 				'class' => $key,
 				'rel'   => 'me',
-			), $key );
+			), $key, $user_id );
 			$attr = array_map( 'esc_attr', $attr );
 
 			/**
