@@ -61,7 +61,7 @@ function superpack_contact_fields() {
 function superpack_contact_fields_register( $methods ) {
 
 	/**
-	 * Bail early if Contact Feilds are not enabled.
+	 * Bail early if Contact Fields are not enabled.
 	 */
 	if ( ! Superpack()->settings()->contact_fields['enable'] ) {
 		return $methods;
@@ -111,7 +111,7 @@ add_filter( 'user_contactmethods', 'superpack_contact_fields_register', 1 );
 function superpack_contact_fields_callback() {
 
 	/**
-	 * Bail early if Contact Feilds are not enabled.
+	 * Bail early if Contact Fields are not enabled.
 	 */
 	if ( ! Superpack()->settings()->contact_fields['enable'] ) {
 		return;
@@ -138,7 +138,7 @@ add_action( 'after_setup_theme', 'superpack_contact_fields_callback', 999 );
 function superpack_contact_fields_markup( $user_id ) {
 
 	/**
-	 * Bail early if Contact Feilds are not enabled.
+	 * Bail early if Contact Fields are not enabled.
 	 */
 	if ( ! Superpack()->settings()->contact_fields['enable'] ) {
 		return;
@@ -236,3 +236,110 @@ function superpack_contact_fields_markup( $user_id ) {
 function superpack_contact_fields_key( $name = '' ) {
 	return apply_filters( 'superpack_contact_fields_prefix', 'superpack_' ) . $name;
 }
+
+
+/**
+ * Migrate Contact Fields data for supported Themes/Snowbird.
+ *
+ * @see https://github.com/xFrontend/superpack/issues/3
+ *
+ * TODO: Remove in a future release.
+ */
+function superpack_contact_fields_data_update() {
+
+	/**
+	 * Bail early if we're not in Admin Dashboard,
+	 */
+	if ( ! is_admin() ) {
+		return;
+	}
+
+	/**
+	 * Bail early if Contact Fields are not enabled.
+	 */
+	if ( ! Superpack()->settings()->contact_fields['enable'] ) {
+		return;
+	}
+
+	$the_key = Superpack()->codename( 'migrate_contact_fields' );
+
+	/**
+	 * Bail if we've done it before.
+	 */
+	if ( get_option( $the_key ) ) {
+		return;
+	}
+
+	/**
+	 * Gather data for the Authors
+	 */
+	$new = $author_ids = array();
+
+	if ( function_exists( 'snowbird_get_contributor_ids' ) ) {
+		$author_ids = snowbird_get_contributor_ids();
+	}
+
+	/**
+	 * A theme author have to provide User IDs to proceed.
+	 */
+	$author_ids = apply_filters( 'superpack_contact_fields_author_ids', $author_ids );
+
+	/**
+	 * Bail when we don't have User IDs.
+	 */
+	if ( empty( $author_ids ) ) {
+		return;
+	}
+
+	/**
+	 * Contact Fields we need to update.
+	 */
+	$fields = array(
+		'facebook',
+		'twitter',
+		'gplus',
+		'linkedin',
+		'email_public',
+	);
+
+	foreach ( $author_ids as $user_id ) {
+
+		foreach ( $fields as $key ) {
+			$old     = get_user_meta( $user_id, $key, true );
+			$current = get_user_meta( $user_id, superpack_contact_fields_key( $key ), true );
+
+			if ( 'email_public' == $key ) {
+				$old     = superpack_sanitize_email( $old );
+				$current = superpack_sanitize_email( $current );
+			} else {
+				$old     = esc_url( $old );
+				$current = esc_url( $current );
+			}
+
+			if ( empty( $current ) && $old != $current ) {
+				$new[ $user_id ][ $key ] = $old;
+			}
+		}
+
+	}
+
+	/**
+	 * Update the data to SuperPack Contact Fields
+	 */
+	foreach ( $new as $user_id => $methods ) {
+
+		foreach ( $methods as $key => $value ) {
+			update_user_meta( $user_id, superpack_contact_fields_key( $key ), $new[ $user_id ][ $key ] );
+		}
+
+	}
+
+	/**
+	 * Mark we're done.
+	 */
+	$theme = wp_get_theme()->parent() ? wp_get_theme()->parent() : wp_get_theme();
+
+	add_option( $the_key, $theme->get( 'Name' ) );
+}
+
+add_action( 'after_setup_theme', 'superpack_contact_fields_data_update', 99 );
