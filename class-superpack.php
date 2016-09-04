@@ -103,12 +103,10 @@ final class Superpack {
 
 								if ( false === $value ) {
 									/**
-									 * Set defaults and bail early.
+									 * Bail early.
 									 */
 									$settings[ $key ] = array(
-										'container_class' => self::get_html_classes( '', $defaults['social_icons']['container_class'] ),
-										'menu_class'      => self::get_html_classes( '', $defaults['social_icons']['menu_class'] ),
-										'icons'           => false,
+										'icons' => false,
 									);
 
 									break;
@@ -158,6 +156,7 @@ final class Superpack {
 								$settings[ $key ] = array(
 									'container_class' => self::get_html_classes( $container_class, $defaults['contact_fields']['container_class'] ),
 									'action_hooks'    => is_array( $action_hooks ) ? array_unique( $action_hooks ) : (array) $action_hooks,
+									'fields'          => isset( $value['fields'] ) ? $value['fields'] : array(),
 									'enable'          => isset( $value['enable'] ) ? $value['enable'] : true,
 								);
 
@@ -168,7 +167,7 @@ final class Superpack {
 				}
 			}
 
-			$settings = wp_parse_args( $settings, $defaults );
+			$settings = self::parse_args( $settings, $defaults );
 
 			/**
 			 * Store settings in class static to avoid multiple parsing
@@ -180,6 +179,32 @@ final class Superpack {
 	}
 
 	/**
+	 * Merge multidimensional arrays.
+	 *
+	 * @param $settings
+	 * @param $defaults
+	 *
+	 * @return array
+	 *
+	 * @see wp_parse_args()
+	 */
+	public function parse_args( &$settings, $defaults = '' ) {
+		$settings = (array) $settings;
+		$defaults = (array) $defaults;
+		$return   = $defaults;
+
+		foreach ( $settings as $key => &$value ) {
+			if ( is_array( $value ) && isset( $return[ $key ] ) ) {
+				$return[ $key ] = self::parse_args( $value, $return[ $key ] );
+			} else {
+				$return[ $key ] = $value;
+			}
+		}
+
+		return $return;
+	}
+
+	/**
 	 * Checks and returns escaped HTML classes.
 	 *
 	 * @param $value
@@ -187,7 +212,7 @@ final class Superpack {
 	 *
 	 * @return string
 	 */
-	public function get_html_classes( $value, $default = null ) {
+	public function get_html_classes( $value, $default = '' ) {
 
 		if ( is_string( $value ) ) {
 			$value = preg_split( '#\s+#', $value );

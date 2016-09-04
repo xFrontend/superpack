@@ -10,7 +10,7 @@ endif;
  */
 function superpack_contact_fields() {
 
-	$fields = array(
+	$defaults = array(
 		'facebook'     => array(
 			'title'      => esc_html__( 'Facebook', 'superpack' ),
 			'label'      => esc_html_x( 'Facebook URL', 'admin', 'superpack' ),
@@ -44,7 +44,9 @@ function superpack_contact_fields() {
 		),
 	);
 
-	return $fields;
+	$fields = Superpack()->parse_args( Superpack()->settings()->contact_fields['fields'], $defaults );
+
+	return apply_filters( 'superpack_contact_fields', $fields );
 }
 
 
