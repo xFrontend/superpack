@@ -165,7 +165,6 @@ function superpack_contact_fields_markup( $user_id ) {
 				$field['type'] = 'email';
 				$field['data'] = get_the_author_meta( 'email', $user_id );
 			} elseif ( isset( $field['type'] ) && 'email' == $field['type'] ) {
-				$field['type'] = 'email';
 				$field['data'] = get_user_meta( $user_id, superpack_contact_fields_key( $key ), true );
 			} else {
 				$field['type'] = 'url';

@@ -120,6 +120,12 @@ Use `[row]` shortcode around `[column]` shortcode to keep columns in a div that 
 
 == Changelog ==
 
+= v0.3.1 =
+Release Date: September 4, 2016
+
+* Fixes - Link output for Email Contact Fields.
+* Code improvements.
+
 = v0.3.0 =
 Release Date: September 4, 2016
 

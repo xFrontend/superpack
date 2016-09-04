@@ -7,7 +7,7 @@
  * Description: Provides a backend to supercharge your site.
  * Text Domain: superpack
  * Domain Path: /languages/
- * Version: 0.3.0
+ * Version: 0.3.1
  * License: GPLv3
  * License URI: http://www.gnu.org/licenses/gpl.html
  */
