@@ -255,9 +255,9 @@ function superpack_contact_fields_data_update() {
 	}
 
 	/**
-	 * Bail early if Contact Fields are not enabled.
+	 * Bail early if Contact Fields are not enabled, or no proper permission.
 	 */
-	if ( ! Superpack()->settings()->contact_fields['enable'] ) {
+	if ( ! Superpack()->settings()->contact_fields['enable'] || ! current_user_can( 'edit_theme_options' ) ) {
 		return;
 	}
 
