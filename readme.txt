@@ -5,7 +5,7 @@ Donate link: https://xfrontend.com/
 Tags: blockquote, column, dropcap, instagram, random posts, recent comments, recent posts, related posts, row, shortcodes, social icons, sticky posts, widgets
 Requires at least: 4.1
 Tested up to: 4.6
-Stable tag: 0.3.0
+Stable tag: 0.3.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
