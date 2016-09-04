@@ -118,7 +118,7 @@ Use `[row]` shortcode around `[column]` shortcode to keep columns in a div that 
 ## Changelog
 
 #### v0.3.0
-Release Date: November 4, 2016
+Release Date: September 4, 2016
 
 * Added - Contact Fields for Author's Profile.
 * Fixes - jQuery deprecated notice.
