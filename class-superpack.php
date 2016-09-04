@@ -6,7 +6,7 @@ endif;
 
 
 final class Superpack {
-	const VERSION = '0.3';
+	const VERSION = '0.3.0';
 
 	protected static $instance = null;
 	protected static $settings = null;

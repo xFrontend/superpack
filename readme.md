@@ -1,6 +1,6 @@
 # SuperPack
 
-Provides half a dozen Shortcodes, including half a dozen Widgets, to supercharge your blog/site.
+Features half-dozen shortocdes, half-dozen widgets, and seamless API for Author's contact-fields.
 
 * Author: xFrontend
 * Author URI: https://xfrontend.com/
@@ -15,7 +15,6 @@ Provides half a dozen Shortcodes, including half a dozen Widgets, to supercharge
 * `[row]` - Group columns into row.
 * `[social-icons]` - Add your social links with icons.
 
-
 More details on shortcodes are given on [FAQ](https://github.com/xFrontend/superpack#frequently-asked-questions).
 
 ## Widgets
@@ -26,6 +25,10 @@ More details on shortcodes are given on [FAQ](https://github.com/xFrontend/super
 * `Posts (SuperPack)` - Display the blog posts with thumbnails. Includes Recent Posts, Random Posts, Sticky Posts and Related Posts
 * `Social Icons (SuperPack)` - Display social profile link icons (require theme supports).
 * `Tags (SuperPack)` - Display your most used tags.
+
+## Contact Fields
+
+SuperPack provides a seamless and powerful API to allow custom contact-fields for Author's Profile. Default fields includes `Facebook URL`, `Twitter URL`, `Google+ URL`, `Linkedin URL` and `Public Email`. Requires a compatible theme.
 
 ## What it does & doesn't
 
@@ -46,7 +49,8 @@ Provided as is without any support. However feel free to reach the author for fe
 
 Manual installation:
 
-1. [Download](https://github.com/xFrontend/SuperPack/archive/master.zip) and extract the zip into your `/wp-content/plugins/` directory.
+1. [Download](https://downloads.wordpress.org/plugin/superpack.zip) and extract the zip into your `/wp-content/plugins/` directory.
+1. `Activate` the plugin through the 'Plugins' menu in WordPress.
 
 Installation from WordPress.org repository using "Add New Plugin"
 
@@ -112,6 +116,14 @@ Use `[row]` shortcode around `[column]` shortcode to keep columns in a div that 
 
 
 ## Changelog
+
+#### v0.3.0
+Release Date: November 4, 2016
+
+* Added - Contact Fields for Author's Profile.
+* Fixes - jQuery deprecated notice.
+* Code cleanups.
+
 
 #### v0.2.2
 Release Date: November 15, 2015
