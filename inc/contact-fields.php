@@ -159,13 +159,17 @@ function superpack_contact_fields_markup( $user_id ) {
 			 * Process field link.
 			 */
 			if ( 'url' == $key ) {
-				$field['link'] = esc_url( get_the_author_meta( 'url', $user_id ) );
+				$field['type'] = 'url';
+				$field['data'] = get_the_author_meta( 'url', $user_id );
 			} elseif ( 'email' == $key ) {
-				$field['link'] = superpack_sanitize_email_output( get_the_author_meta( 'email', $user_id ) );
+				$field['type'] = 'email';
+				$field['data'] = get_the_author_meta( 'email', $user_id );
 			} elseif ( isset( $field['type'] ) && 'email' == $field['type'] ) {
-				$field['link'] = superpack_sanitize_email_output( get_user_meta( $user_id, superpack_contact_fields_key( $key ), true ) );
+				$field['type'] = 'email';
+				$field['data'] = get_user_meta( $user_id, superpack_contact_fields_key( $key ), true );
 			} else {
-				$field['link'] = esc_url( get_user_meta( $user_id, superpack_contact_fields_key( $key ), true ) );
+				$field['type'] = 'url';
+				$field['data'] = get_user_meta( $user_id, superpack_contact_fields_key( $key ), true );
 			}
 
 			/**
@@ -200,11 +204,20 @@ function superpack_contact_fields_markup( $user_id ) {
 			}
 
 			/**
+			 * Prepares the link.
+			 */
+			if ( isset( $field['type'] ) && 'email' == $field['type'] ) {
+				$link = superpack_sanitize_email_output( $field['data'] );
+			} else {
+				$link = esc_url( $field['data'] );
+			}
+
+			/**
 			 * Prepare the markup for the field.
 			 */
-			if ( ! empty( $field['link'] ) ) {
+			if ( ! empty( $link ) ) {
 				$html .= '<li>';
-				$html .= '<a href="' . esc_url( $field['link'] ) . '" ';
+				$html .= '<a href="' . $link . '" ';
 				foreach ( $attr as $name => $value ) {
 					$html .= " $name=" . '"' . $value . '"';
 				}
